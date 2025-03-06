@@ -1,0 +1,89 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\mlody\\Desktop\\generator3D\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0FB50B7C-CBA2-4C6A-9725-DAC8CE80593E}|generator3D\\generator3D.vcxproj|C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\generator3D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{0FB50B7C-CBA2-4C6A-9725-DAC8CE80593E}|generator3D\\generator3D.vcxproj|solutionrelative:generator3D\\generator3D.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FB50B7C-CBA2-4C6A-9725-DAC8CE80593E}|generator3D\\generator3D.vcxproj|C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\fragment.glsl||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{0FB50B7C-CBA2-4C6A-9725-DAC8CE80593E}|generator3D\\generator3D.vcxproj|solutionrelative:generator3D\\fragment.glsl||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FB50B7C-CBA2-4C6A-9725-DAC8CE80593E}|generator3D\\generator3D.vcxproj|C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\vertex.glsl||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{0FB50B7C-CBA2-4C6A-9725-DAC8CE80593E}|generator3D\\generator3D.vcxproj|solutionrelative:generator3D\\vertex.glsl||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FB50B7C-CBA2-4C6A-9725-DAC8CE80593E}|generator3D\\generator3D.vcxproj|C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\packages.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{0FB50B7C-CBA2-4C6A-9725-DAC8CE80593E}|generator3D\\generator3D.vcxproj|solutionrelative:generator3D\\packages.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "generator3D.cpp",
+              "DocumentMoniker": "C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\generator3D.cpp",
+              "RelativeDocumentMoniker": "generator3D\\generator3D.cpp",
+              "ToolTip": "C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\generator3D.cpp",
+              "RelativeToolTip": "generator3D\\generator3D.cpp",
+              "ViewState": "AgIAABcBAAAAAAAAAAAYwCoBAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-05T19:19:39.636Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "fragment.glsl",
+              "DocumentMoniker": "C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\fragment.glsl",
+              "RelativeDocumentMoniker": "generator3D\\fragment.glsl",
+              "ToolTip": "C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\fragment.glsl",
+              "RelativeToolTip": "generator3D\\fragment.glsl",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-05T20:23:43.019Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "vertex.glsl",
+              "DocumentMoniker": "C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\vertex.glsl",
+              "RelativeDocumentMoniker": "generator3D\\vertex.glsl",
+              "ToolTip": "C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\vertex.glsl",
+              "RelativeToolTip": "generator3D\\vertex.glsl",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-05T20:23:15.329Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "packages.config",
+              "DocumentMoniker": "C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\packages.config",
+              "RelativeDocumentMoniker": "generator3D\\packages.config",
+              "ToolTip": "C:\\Users\\mlody\\Desktop\\generator3D\\generator3D\\packages.config",
+              "RelativeToolTip": "generator3D\\packages.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-03-05T19:35:20.097Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
