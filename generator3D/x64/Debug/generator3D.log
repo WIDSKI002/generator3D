@@ -1,0 +1,6 @@
+﻿glew32sd.lib(glew.obj) : warning LNK4099: nie znaleziono pliku PDB „” z elementem „glew32sd.lib(glew.obj)” lub w pozycji „”; obiekt zostanie skonsolidowany bez informacji debugowania
+generator3D.obj : error LNK2019: nierozpoznany symbol zewnętrzny __imp_glClear przywołany w funkcji main
+glew32sd.lib(glew.obj) : error LNK2019: nierozpoznany symbol zewnętrzny __imp_glGetString przywołany w funkcji glewGetExtension
+glew32sd.lib(glew.obj) : error LNK2019: nierozpoznany symbol zewnętrzny __imp_wglGetCurrentDC przywołany w funkcji wglewGetExtension
+glew32sd.lib(glew.obj) : error LNK2019: nierozpoznany symbol zewnętrzny __imp_wglGetProcAddress przywołany w funkcji _glewInit_GL_VERSION_1_2
+C:\Users\mlody\Desktop\generator3D\x64\Debug\generator3D.exe : fatal error LNK1120: liczba nierozpoznanych elementów zewnętrznych: 4
