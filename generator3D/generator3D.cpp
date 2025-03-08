@@ -150,8 +150,8 @@ int main() {
                 indices.push_back(topRight);
 
                 indices.push_back(topRight);
-                indices.push_back(bottomLeft);
                 indices.push_back(bottomRight);
+                indices.push_back(bottomLeft);
             }
         }
     }
@@ -188,45 +188,58 @@ int main() {
     float yaw = 0.0f;
     float pitch = 0.0f;
     float cameraSpeed = 0.05f; // Prędkość ruchu kamery
-    glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 10.0f); // Początkowa pozycja kamery nad mapą
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f); // Początkowa pozycja kamery nad mapą
 
     // Ustawienie callbacków dla myszy
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // Zmieniono na normalny kursor
 
     // Zmiana na sterowanie za pomocą klawiszy W, A, S, D
     glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-        static float yaw = 0.0f;
-        static float pitch = 0.0f;
-        float sensitivity = 11.1f; // Wrażliwość
+
+        float sensitivity = 5.1f; // Wrażliwość
+
+        // Uzyskanie dostępu do zmiennej cameraPos
+        glm::vec3* cameraPos = reinterpret_cast<glm::vec3*>(glfwGetWindowUserPointer(window));
 
         if (action == GLFW_PRESS || action == GLFW_REPEAT) {
             if (key == GLFW_KEY_W) {
-                pitch += sensitivity; // Patrz wyżej
-                if (pitch > 89.0f) pitch = 89.0f; // Ograniczenie pitch
+                cameraPos->x += sensitivity; // Patrz wyżej
+ 
             }
             if (key == GLFW_KEY_S) {
-                pitch -= sensitivity; // Patrz niżej
-                if (pitch < -89.0f) pitch = -89.0f; // Ograniczenie pitch
+                cameraPos->x -= sensitivity; // Patrz niżej
+        
             }
             if (key == GLFW_KEY_A) {
-                yaw -= sensitivity; // Patrz w lewo
+                cameraPos->z -= sensitivity; // Patrz w lewo
             }
             if (key == GLFW_KEY_D) {
-                yaw += sensitivity; // Patrz w prawo
+                cameraPos->z += sensitivity; // Patrz w prawo
+            }
+            // Dodano obsługę klawiszy Z i X do zmiany pozycji kamery w osi Z
+            if (key == GLFW_KEY_Z) {
+                cameraPos->y += sensitivity; // Przesunięcie kamery w dół
+            }
+            if (key == GLFW_KEY_X) {
+                cameraPos->y -= sensitivity; // Przesunięcie kamery w górę
             }
         }
     });
 
+    // Ustawienie wskaźnika na cameraPos
+    glfwSetWindowUserPointer(window, &cameraPos);
+
     // Zmiana na rozglądanie się przy użyciu prawego przycisku myszy
     bool firstMouse = true;
-    double lastX = 400, lastY = 300;
+    double lastX = 0, lastY = 0;
+    glm::vec3 direction;
 
     glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {
-        static float yaw = 0.0f;
-        static float pitch = 0.0f;
-        static bool firstMouse = true;
-        static double lastX = 400, lastY = 300;
 
+        static bool firstMouse = true;
+        static double lastX = 0, lastY = 0;
+
+        glm::vec3* cameraPos = reinterpret_cast<glm::vec3*>(glfwGetWindowUserPointer(window));
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
             if (firstMouse) {
                 lastX = xpos;
@@ -239,16 +252,18 @@ int main() {
             lastX = xpos;
             lastY = ypos;
 
-            float sensitivity = 11.1f; // Wrażliwość
+            float sensitivity = 1.1f; // Wrażliwość
             xoffset *= sensitivity;
             yoffset *= sensitivity;
 
-            yaw += xoffset;
-            pitch += yoffset;
-
-            // Ograniczenie pitch
-            if (pitch > 89.0f) pitch = 89.0f;
-            if (pitch < -89.0f) pitch = -89.0f;
+            if (xoffset != 0) {
+              /*  glm::vec3 direction = glm::vec3(cos(glm::radians(yaw)), sin(glm::radians(pitch)), sin(glm::radians(yaw)));
+                zmiana = true;*/
+                cameraPos->z += xoffset;
+                cameraPos->y += yoffset;
+            }
+            
+       
         } else {
             firstMouse = true; // Resetuj, gdy nie jest wciśnięty prawy przycisk myszy
         }
@@ -258,7 +273,7 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         // Wyczyść bufory koloru i głębi
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-       
+
         // Użyj programu shaderowego
         glUseProgram(shaderProgram);
 
@@ -277,6 +292,7 @@ int main() {
             0.1f, 100.0f
         );
         glDepthFunc(GL_LESS);
+        
         // Przekaż macierze do shaderów
         GLint modelLoc = glGetUniformLocation(shaderProgram, "model");
         GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
@@ -284,26 +300,35 @@ int main() {
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-        // Ruch kamery
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            cameraPos += cameraSpeed * glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw)));
-        }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            cameraPos -= cameraSpeed * glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw)));
-        }
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            cameraPos += glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw))))) * cameraSpeed;
-        }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            cameraPos -= glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw))))) * cameraSpeed;
-        }
-
+        //std::cout << "zmiana" << zmiana << std::endl;
+        //if (zmiana) {
+        //    glm::vec3 direction = glm::vec3(cos(glm::radians(yaw)), sin(glm::radians(pitch)), sin(glm::radians(yaw))); // Z ustawione na sin(pitch)
+        //    cameraPos.y += glm::normalize(direction).y; // Zmiana tylko y
+        //    cameraPos.z += glm::normalize(direction).z; // Zmiana tylko z
+        //    std::cout << "myszka:" << cameraPos.y << ",z: " << cameraPos.z << std::endl;
+        //}
+        //// Ruch kamery
+        //if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        //    cameraPos += cameraSpeed * glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw)));
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        //    cameraPos -= cameraSpeed * glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw)));
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        //    cameraPos += glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw))))) * cameraSpeed;
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        //    cameraPos -= glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw))))) * cameraSpeed;
+        //}
+        // std::cout << "camera: " << cameraPos.x << ", " << cameraPos.y << ", " << cameraPos.z << std::endl;
         // Narysuj trójkąt
         glBegin(GL_TRIANGLES);
-        glVertex3f(0.0f, 0.5f, 0.0f);
+        // Definiuje wierzchołek trójkąta w punkcie (0.0, 0.0, 0.0)
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        // Definiuje wierzchołek trójkąta w punkcie (-0.5, -0.5, 0.0)
         glVertex3f(-0.5f, -0.5f, 0.0f);
-        glVertex3f(0.5f, -0.5f, 0.0f);
+        // Definiuje wierzchołek trójkąta w punkcie (0.5, -0.5, 0.0) w osi współrzędnych x, y, z
+        glVertex3f(0.5f, -0.5f, 1.0f);
         glEnd();
 
         // Narysuj siatkę
