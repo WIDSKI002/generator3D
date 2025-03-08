@@ -130,31 +130,31 @@ int main() {
     std::vector<float> vertices;
     std::vector<unsigned int> indices;
 
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-            unsigned char heightValue = image[(y * width + x) * channels];
-            float height = (heightValue / 255.0f) * 100.0f;
+ for (int y = 0; y < height; ++y) {
+     for (int x = 0; x < width; ++x) {
+         unsigned char heightValue = image[(y * width + x) * channels];
+         float height = (heightValue / 255.0f) * 10.0f; // Skalowanie wysokości
 
-            vertices.push_back((float)x / width);
-            vertices.push_back(height);
-            vertices.push_back((float)y / height);
+         vertices.push_back((float)x - width / 2.0f); // Centrowanie mapy
+         vertices.push_back(height);
+         vertices.push_back((float)y - height / 2.0f); // Centrowanie mapy
 
-            if (x < width - 1 && y < height - 1) {
-                int topLeft = y * width + x;
-                int topRight = topLeft + 1;
-                int bottomLeft = (y + 1) * width + x;
-                int bottomRight = bottomLeft + 1;
+         if (x < width - 1 && y < height - 1) {
+             int topLeft = y * width + x;
+             int topRight = topLeft + 1;
+             int bottomLeft = (y + 1) * width + x;
+             int bottomRight = bottomLeft + 1;
 
-                indices.push_back(topLeft);
-                indices.push_back(bottomLeft);
-                indices.push_back(topRight);
+             indices.push_back(topLeft);
+             indices.push_back(bottomLeft);
+             indices.push_back(topRight);
 
-                indices.push_back(topRight);
-                indices.push_back(bottomRight);
-                indices.push_back(bottomLeft);
-            }
-        }
-    }
+             indices.push_back(topRight);
+             indices.push_back(bottomLeft);
+             indices.push_back(bottomRight);
+         }
+     }
+ }
 
     stbi_image_free(image);
 
@@ -188,7 +188,7 @@ int main() {
     float yaw = 0.0f;
     float pitch = 0.0f;
     float cameraSpeed = 0.05f; // Prędkość ruchu kamery
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f); // Początkowa pozycja kamery nad mapą
+glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 20.0f);// Początkowa pozycja kamery nad mapą
 
     // Ustawienie callbacków dla myszy
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // Zmieniono na normalny kursor
@@ -278,12 +278,10 @@ int main() {
         glUseProgram(shaderProgram);
 
         // Macierze kamery
-        glm::mat4 model = glm::mat4(1.0f); // Macierz jednostkowa
+        glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::lookAt(
             cameraPos,
-            cameraPos + glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)), 
-                                   sin(glm::radians(pitch)), 
-                                   sin(glm::radians(yaw)) * cos(glm::radians(pitch))),
+            glm::vec3(0.0f, 0.0f, 0.0f),
             glm::vec3(0.0f, 1.0f, 0.0f)
         );
         glm::mat4 projection = glm::perspective(
@@ -322,14 +320,14 @@ int main() {
         //}
         // std::cout << "camera: " << cameraPos.x << ", " << cameraPos.y << ", " << cameraPos.z << std::endl;
         // Narysuj trójkąt
-        glBegin(GL_TRIANGLES);
-        // Definiuje wierzchołek trójkąta w punkcie (0.0, 0.0, 0.0)
-        glVertex3f(0.0f, 0.0f, 0.0f);
-        // Definiuje wierzchołek trójkąta w punkcie (-0.5, -0.5, 0.0)
-        glVertex3f(-0.5f, -0.5f, 0.0f);
-        // Definiuje wierzchołek trójkąta w punkcie (0.5, -0.5, 0.0) w osi współrzędnych x, y, z
-        glVertex3f(0.5f, -0.5f, 1.0f);
-        glEnd();
+        //glBegin(GL_TRIANGLES);
+        //// Definiuje wierzchołek trójkąta w punkcie (0.0, 0.0, 0.0)
+        //glVertex3f(0.0f, 0.0f, 0.0f);
+        //// Definiuje wierzchołek trójkąta w punkcie (-0.5, -0.5, 0.0)
+        //glVertex3f(-0.5f, -0.5f, 0.0f);
+        //// Definiuje wierzchołek trójkąta w punkcie (0.5, -0.5, 0.0) w osi współrzędnych x, y, z
+        //glVertex3f(0.5f, -0.5f, 1.0f);
+        //glEnd();
 
         // Narysuj siatkę
         glBindVertexArray(VAO);
