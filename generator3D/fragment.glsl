@@ -9,8 +9,8 @@ void main()
     float normalizedHeight = (Height + 10.0) / 20.0; // Zakładamy, że wysokość jest w zakresie [-10, 10]
 
     // Interpolacja między ciemnym a jasnym kolorem w zależności od wysokości
-    vec3 darkColor = vec3(0.0, 0.0, 0.5); // Ciemny kolor (np. niebieski)
-    vec3 lightColor = vec3(0.8, 0.8, 1.0); // Jasny kolor (np. jasnoniebieski)
+    vec3 darkColor = vec3(0.4, 0.2, 0.1); // Ciemny kolor (np. ciemny szary)
+    vec3 lightColor = vec3(0.7, 0.6, 0.5); // Jasny kolor (np. jasnoszary)
 
     // Mieszanie kolorów na podstawie wysokości
     vec3 finalColor = mix(darkColor, lightColor, normalizedHeight);

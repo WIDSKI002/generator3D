@@ -101,7 +101,7 @@ int main() {
     }
 
     // Tworzenie okna
-    GLFWwindow* window = glfwCreateWindow(800, 600, "3D Heightmap", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(600, 600, "3D Heightmap", NULL, NULL);
     if (!window) {
         std::cerr << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -130,31 +130,40 @@ int main() {
     std::vector<float> vertices;
     std::vector<unsigned int> indices;
 
- for (int y = 0; y < height; ++y) {
-     for (int x = 0; x < width; ++x) {
-         unsigned char heightValue = image[(y * width + x) * channels];
-         float height = (heightValue / 255.0f) * 10.0f; // Skalowanie wysokości
+    // Ustal minimalny wymiar, aby mapa była kwadratowa
+    int size = std::min(width, height);
 
-         vertices.push_back((float)x - width / 2.0f); // Centrowanie mapy
-         vertices.push_back(height);
-         vertices.push_back((float)y - height / 2.0f); // Centrowanie mapy
+    // Pętla iterująca przez każdy piksel obrazu mapy wysokości
+    for (int y = 0; y < size; ++y) {
+        for (int x = 0; x < size; ++x) {
+            // Odczyt wartości wysokości z obrazu
+            unsigned char heightValue = image[(y * width + x) * channels];
+            // Skalowanie wartości wysokości do zakresu 0-20
+            float height = (heightValue / 255.0f) * 20.0f; // Skalowanie wysokości
 
-         if (x < width - 1 && y < height - 1) {
-             int topLeft = y * width + x;
-             int topRight = topLeft + 1;
-             int bottomLeft = (y + 1) * width + x;
-             int bottomRight = bottomLeft + 1;
+            // Dodawanie współrzędnych wierzchołka do wektora vertices
+            vertices.push_back((float)x - size / 2.0f); // Centrowanie mapy
+            vertices.push_back(height);
+            vertices.push_back((float)y - size / 2.0f); // Centrowanie mapy
 
-             indices.push_back(topLeft);
-             indices.push_back(bottomLeft);
-             indices.push_back(topRight);
+            // Tworzenie indeksów dla siatki 3D, aby zdefiniować trójkąty
+            if (x < size - 1 && y < size - 1) {
+                int topLeft = y * size + x;
+                int topRight = topLeft + 1;
+                int bottomLeft = (y + 1) * size + x;
+                int bottomRight = bottomLeft + 1;
 
-             indices.push_back(topRight);
-             indices.push_back(bottomLeft);
-             indices.push_back(bottomRight);
-         }
-     }
- }
+                // Dodawanie indeksów do wektora indices
+                indices.push_back(topLeft);
+                indices.push_back(bottomLeft);
+                indices.push_back(topRight);
+
+                indices.push_back(topRight);
+                indices.push_back(bottomLeft);
+                indices.push_back(bottomRight);
+            }
+        }
+    }
 
     stbi_image_free(image);
 
@@ -188,7 +197,7 @@ int main() {
     float yaw = 0.0f;
     float pitch = 0.0f;
     float cameraSpeed = 0.05f; // Prędkość ruchu kamery
-glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 20.0f);// Początkowa pozycja kamery nad mapą
+    glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 20.0f); // Początkowa pozycja kamery nad mapą
 
     // Ustawienie callbacków dla myszy
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); // Zmieniono na normalny kursor
@@ -204,11 +213,9 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 20.0f);// Początkowa pozycja kamer
         if (action == GLFW_PRESS || action == GLFW_REPEAT) {
             if (key == GLFW_KEY_W) {
                 cameraPos->x += sensitivity; // Patrz wyżej
- 
             }
             if (key == GLFW_KEY_S) {
                 cameraPos->x -= sensitivity; // Patrz niżej
-        
             }
             if (key == GLFW_KEY_A) {
                 cameraPos->z -= sensitivity; // Patrz w lewo
@@ -257,13 +264,9 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 20.0f);// Początkowa pozycja kamer
             yoffset *= sensitivity;
 
             if (xoffset != 0) {
-              /*  glm::vec3 direction = glm::vec3(cos(glm::radians(yaw)), sin(glm::radians(pitch)), sin(glm::radians(yaw)));
-                zmiana = true;*/
                 cameraPos->z += xoffset;
                 cameraPos->y += yoffset;
             }
-            
-       
         } else {
             firstMouse = true; // Resetuj, gdy nie jest wciśnięty prawy przycisk myszy
         }
@@ -298,36 +301,6 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 20.0f);// Początkowa pozycja kamer
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-        //std::cout << "zmiana" << zmiana << std::endl;
-        //if (zmiana) {
-        //    glm::vec3 direction = glm::vec3(cos(glm::radians(yaw)), sin(glm::radians(pitch)), sin(glm::radians(yaw))); // Z ustawione na sin(pitch)
-        //    cameraPos.y += glm::normalize(direction).y; // Zmiana tylko y
-        //    cameraPos.z += glm::normalize(direction).z; // Zmiana tylko z
-        //    std::cout << "myszka:" << cameraPos.y << ",z: " << cameraPos.z << std::endl;
-        //}
-        //// Ruch kamery
-        //if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        //    cameraPos += cameraSpeed * glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw)));
-        //}
-        //if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        //    cameraPos -= cameraSpeed * glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw)));
-        //}
-        //if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        //    cameraPos += glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw))))) * cameraSpeed;
-        //}
-        //if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        //    cameraPos -= glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(cos(glm::radians(yaw)), 0.0f, sin(glm::radians(yaw))))) * cameraSpeed;
-        //}
-        // std::cout << "camera: " << cameraPos.x << ", " << cameraPos.y << ", " << cameraPos.z << std::endl;
-        // Narysuj trójkąt
-        //glBegin(GL_TRIANGLES);
-        //// Definiuje wierzchołek trójkąta w punkcie (0.0, 0.0, 0.0)
-        //glVertex3f(0.0f, 0.0f, 0.0f);
-        //// Definiuje wierzchołek trójkąta w punkcie (-0.5, -0.5, 0.0)
-        //glVertex3f(-0.5f, -0.5f, 0.0f);
-        //// Definiuje wierzchołek trójkąta w punkcie (0.5, -0.5, 0.0) w osi współrzędnych x, y, z
-        //glVertex3f(0.5f, -0.5f, 1.0f);
-        //glEnd();
 
         // Narysuj siatkę
         glBindVertexArray(VAO);
@@ -339,7 +312,6 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 20.0f);// Początkowa pozycja kamer
 
         // Obsłuż zdarzenia
         glfwPollEvents();
-     
     }
    
     // Zwolnienie zasobów
